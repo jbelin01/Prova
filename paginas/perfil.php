@@ -15,6 +15,10 @@
         require_once "../config/banco.php";
         include_once "../config/enviarImagem.php";
         include_once "../header.php";
+        require_once "../classes/Usuario.php";
+        require_once "../classes/Postagem.php";
+        
+        // session_start();
 
         $codUsuario = $_GET["usr"] ?? null;
         $textoNovoPost = $_POST["textoPost"] ?? null;
@@ -49,8 +53,14 @@
         <div style="width: 100%;">
             
             <div class="single-post-container" style="margin-top: 20px;">
-                imagem e nome do usuario
+                <?php Usuario::cartaoUsuario($usuario->imagem, $usuario->nome); ?>
             </div>
+                
+            <?php 
+
+                if($codUsuario == $_SESSION['codUsu']){
+            
+            ?>
 
             <div class="single-post-container" style="margin-top: 20px;">
                 <h2>Nova Postagem</h2>
@@ -61,6 +71,14 @@
                     <br><br><button type="submit" class="btn-blue">Comentar</button>
                 </form>
             </div>
+
+            <?php 
+                } 
+            ?>
+
+
+            
+            
             
 
             <h2>Outras Postagens</h2>
@@ -70,12 +88,12 @@
                 <?php 
                 
                     $postagens = pegarPostagens($codUsuario);
-                    // echo var_dump($postagens); // apenas debug
+                   
 
                     for ($i=0; $i < count($postagens); $i++) { 
                         $p = $postagens[$i];
                         //-- descomentar ao arrumar import
-                        //-- Postagem::gerarPostCard($p->cod, $p->imagem, $p->nome, $p->texto_post, $p->post_img, $p->likes, 0);    
+                        Postagem::gerarPostCard($p->cod, $p->imagem, $p->nome, $p->texto_post, $p->post_img, $p->likes, 0);    
                     }
                 ?>
             </div>
